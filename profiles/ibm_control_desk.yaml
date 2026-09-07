@@ -1,0 +1,120 @@
+# =============================================================================
+# Profile de origem: IBM Control Desk (também conhecido como IBM Maximo IT)
+# -----------------------------------------------------------------------------
+# Aliases baseados nos campos típicos do IBM Control Desk / Maximo ITSM.
+# Validar e ajustar com tickets reais — seguir docs/adding-a-new-source.md.
+# =============================================================================
+
+source_id: ibm_control_desk
+display_name: "IBM Control Desk"
+version: 1
+
+field_aliases:
+  ticket_code: ["Ticket ID", "Record ID", "Service Request", "SR", "Incident", "INC",
+    "Número do ticket", "ID do pedido"]
+  ticket_type: ["Class", "Classification", "Type", "Classe", "Tipo", "Categoria"]
+  system: ["CI Name", "Configuration Item", "Asset", "Affected CI", "Sistema", "Ativo",
+    "Item de configuração"]
+  environment: ["Environment", "Ambiente", "Location", "Site"]
+  state: ["Status", "State", "Situation", "Estado", "Situação"]
+  requester: ["Reported By", "Affected Person", "Requestor", "Caller", "Reportado
+        por", "Solicitante", "Afetado"]
+  implementer: ["Owner", "Assigned To", "Technician", "Resolved By", "Responsável",
+    "Atribuído a", "Resolvido por"]
+  approver: ["Approved By", "Change Approver", "Authorized By", "Aprovado por", "Autorizador"]
+  beneficiary: ["Affected Person", "Requested for", "Beneficiário", "Para"]
+  justification: ["Description", "Long Description", "Justification", "Business Reason",
+    "Descrição", "Justificação", "Motivo"]
+
+date_aliases:
+  request_date: ["Report Date", "Open Date", "Created", "Data de abertura", "Data
+        de criação"]
+  approval_date: ["Approval Date", "Authorized Date", "Data de aprovação"]
+  implementation_date: ["Actual End", "Resolved Date", "Closed Date", "Data de resolução",
+    "Data de fecho"]
+  validation_date: ["Verified Date", "Tested Date", "Data de verificação"]
+
+date_formats:
+  - "%d/%m/%Y %H:%M:%S"
+  - "%d/%m/%Y %H:%M"
+  - "%Y-%m-%d %H:%M:%S"
+  - "%Y-%m-%dT%H:%M:%S"
+  - "%d-%m-%Y"
+
+expected_states:
+  - "Closed"
+  - "Resolved"
+  - "Complete"
+  - "Fechado"
+  - "Resolvido"
+  - "Concluído"
+
+checks:
+  confidence_threshold: 0.6
+  sod:
+    include_beneficiary: false
+    allow_role_overlap: false
+  validation:
+    required: false
+  timeliness:
+    enabled: false
+    sla_days:
+
+extraction_notes: |
+  - O IBM Control Desk usa "SR" para Service Request e "INC" para Incident —
+    usar o número completo como ticket_code (ex: SR000123).
+  - O campo "Reported By" é quem abriu o ticket (requester).
+    "Affected Person" pode ser o utilizador que recebe o acesso — usar como
+    contexto adicional mas não confundir com requester.
+  - Aprovações podem aparecer numa secção "Workflow" ou "Approvals" com
+    múltiplas entradas — extrair a aprovação final.
+  - Datas podem aparecer no formato europeu (DD/MM/YYYY).
+
+examples:
+  - name: ibm_control_desk_sr151253
+    ticket_text: "[Página 1]\n                                                   \
+      \                               \n                                         \
+      \                                         \n                               \
+      \                                                   \n                     \
+      \                                                             \n           \
+      \                                                                       \n \
+      \                                                                          \
+      \       \n                                                                 \
+      \                 \n     Atribuir Acesso Temporário                        \
+      \                           \n     a Utilizador SAP FI -                   \
+      \                                     \n     PRODUÇÃO   (PRD)              \
+      \                                               \n      SR151253 Acesso temporário
+      à máquina do SAP FI para debug e ST22            \n                        \
+      \                                                          \n     Bom dia  \
+      \                                                                    \n    \
+      \ No seguimento da anomalia SR151252, que está a condicionar o carregamento
+      de um ficheiro necessário para IFRS17, solicito o acesso de\n     debug e ST22
+      para a Ana Fisher para o dia 30/Jan, de modo a apurar a causa do erro. O mesmo
+      ficheiro é carregado sem erro no ambiente de\n     qualidade.              \
+      \                                                     \n     Obrigado      \
+      \                                                               \n     Nuno\
+      \                                                                         \n\
+      \                                                                          \
+      \        \n      Data de Criação        30-01-2024 09:20                   \
+      \                  \n      Estado do Pedido       Closed                   \
+      \                            \n      Prioridade             Normal         \
+      \                                      \n      Requisitante           AP07418
+      - Nuno Rica\n[... truncado para exemplo ...]"
+    expected_extraction:
+      ticket_code: SR151253
+      ticket_type: Acesso temporário ao SAP FI para debug e ST22
+      system: SAP FI
+      environment: Produção (PRD)
+      state: Closed
+      requester: Nuno Ricardo Marques <AP07418>
+      approver: João Borbinha
+      implementer: Marina Albuquerque
+      beneficiary: Ana Fisher
+      request_date: '2024-01-30'
+      approval_date: '2024-01-30'
+      implementation_date: '2024-01-30'
+      validation_date: '2024-01-30'
+      justification: No seguimento da anomalia SR151252, que está a condicionar 
+        o carregamento de um ficheiro necessário para IFRS17, solicitou-se 
+        acesso de debug e ST22 para apurar a causa do erro. O mesmo ficheiro é 
+        carregado sem erro no ambiente de qualidade.

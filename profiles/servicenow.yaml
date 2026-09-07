@@ -1,0 +1,112 @@
+# =============================================================================
+# Profile de origem: ServiceNow
+# -----------------------------------------------------------------------------
+# Tudo o que é específico desta origem vive aqui. Adicionar um cliente/origem novo é
+# criar um ficheiro como este — SEM tocar em código. Ver docs/adding-a-new-source.md.
+# Aliases em PT e EN porque os tickets podem vir em ambos os idiomas.
+# =============================================================================
+
+source_id: servicenow
+display_name: "ServiceNow"
+version: 1
+
+# --- Como esta origem chama a cada campo canónico -----------------------------
+# Lista todos os rótulos reais observados. É aqui que se absorve a variação entre
+# clientes e o bilinguismo. Preferir sempre observar rótulos em tickets reais.
+field_aliases:
+  ticket_code:
+    ["Number", "Ticket", "Nº do pedido", "Request", "RITM", "Task number"]
+  ticket_type:
+    ["Category", "Request type", "Tipo", "Catalog item", "Short description"]
+  system:
+    ["Configuration item", "CI", "Application", "Sistema", "Serviço afetado"]
+  environment:
+    ["Environment", "Ambiente", "Stage"]
+  state:
+    ["State", "Estado", "Status"]
+  requester:
+    ["Requested for", "Requested by", "Caller", "Opened by", "Solicitante"]
+  implementer:
+    ["Assigned to", "Closed by", "Implementer", "Implementado por", "Executado por"]
+  approver:
+    ["Approved by", "Approver", "Aprovado por", "Aprovador"]
+  beneficiary: ["Requested for", "Affected user", "Para utilizador", "Beneficiário"]
+  justification:
+    ["Justification", "Business justification", "Justificação", "Motivo", "Reason"]
+
+# Campos de data e como cada um é rotulado nesta origem
+date_aliases:
+  request_date: ["Opened", "Created", "Data de abertura", "Aberto em"]
+  approval_date: ["Approved on", "Approval date", "Data de aprovação"]
+  implementation_date: ["Closed", "Implemented on", "Data de implementação", "Fechado em"]
+  validation_date: ["Validated on", "Tested on", "Data de validação"]
+
+# Formatos de data típicos desta origem (strptime). Normalizados para ISO 8601.
+date_formats:
+  - "%d-%m-%Y %H:%M:%S"
+  - "%d/%m/%Y %H:%M"
+  - "%Y-%m-%d %H:%M:%S"
+  - "%Y-%m-%d"
+
+# Estados que contam como "concluído/fechado" para a regra R6.
+expected_states:
+  - "Closed Complete"
+  - "Closed"
+  - "Fechado"
+  - "Resolvido"
+  - "Concluído"
+
+# --- Configuração dos avaliadores (regras) para esta origem/cliente -----------
+checks:
+  confidence_threshold: 0.6      # abaixo disto, campo considerado não fiável -> REVER
+  sod:
+    include_beneficiary: false        # v1: SoD sobre o trio; 4º papel fica para o futuro
+    allow_role_overlap: false
+  validation:
+    required: false              # false = R5 NAO_APLICAVEL (validação opcional por defeito)
+  timeliness:
+    enabled: false               # ativar e definir sla_days se o cliente tiver SLA
+    sla_days: null
+
+# --- Notas de extração específicas desta origem -------------------------------
+extraction_notes: |
+  - O número do RITM e o número da TASK podem coexistir; usar o RITM como ticket_code.
+  - "Requested for" é o utilizador que RECEBE o acesso; "Requested by"/"Caller" é quem
+    ABRE o pedido. Para o requester (quem fez o request) usar "Requested by"/"Caller".
+  - O aprovador pode aparecer numa secção "Approvers" com múltiplas linhas; extrair o
+    aprovador final (estado "Approved").
+
+# --- Exemplos few-shot (validados por auditor) --------------------------------
+# 2 a 4 exemplos reais melhoram muito a extração. Anonimizar quando necessário.
+# Cada exemplo = texto do ticket + a extração canónica correta.
+examples:
+  - name: "criação de acesso — caso conforme"
+    ticket_text: |
+      Number: RITM0012345
+      Short description: Criação de acesso — SAP PRD
+      Requested by: Ana Silva (ana.silva@cliente.pt)
+      Requested for: Bruno Costa (bruno.costa@cliente.pt)
+      Configuration item: SAP ECC
+      Environment: Produção
+      State: Closed Complete
+      Opened: 03-02-2026 09:14:00
+      Approved by: Carla Nunes (carla.nunes@cliente.pt)
+      Approved on: 03-02-2026 11:00:00
+      Closed: 04-02-2026 15:30:00
+      Assigned to: Diogo Reis (diogo.reis@cliente.pt)
+      Justification: Novo colaborador do departamento financeiro.
+    expected_extraction:
+      ticket_code: "RITM0012345"
+      ticket_type: "Criação de acesso"
+      system: "SAP ECC"
+      environment: "Produção"
+      state: "Closed Complete"
+      requester: "Ana Silva (ana.silva@cliente.pt)"
+      implementer: "Diogo Reis (diogo.reis@cliente.pt)"
+      approver: "Carla Nunes (carla.nunes@cliente.pt)"
+      beneficiary: null
+      request_date: "2026-02-03"
+      approval_date: "2026-02-03"
+      implementation_date: "2026-02-04"
+      validation_date: null
+      justification: "Novo colaborador do departamento financeiro."

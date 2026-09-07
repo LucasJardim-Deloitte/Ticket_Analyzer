@@ -1,0 +1,59 @@
+# =============================================================================
+# Profile de origem: Generic
+# -----------------------------------------------------------------------------
+# Esqueleto — preencher com aliases reais observados em tickets de clientes.
+# Seguir docs/adding-a-new-source.md e usar o modo de Calibração da app.
+# =============================================================================
+
+source_id: generic
+display_name: "Genérico"
+version: 1
+
+field_aliases:
+  ticket_code: ["Issue Key", "Ticket", "ID", "Número", "Ref"]
+  ticket_type: ["Type", "Issue Type", "Tipo", "Categoria"]
+  system: ["Component", "System", "Sistema", "Aplicação"]
+  environment: ["Environment", "Ambiente"]
+  state: ["Status", "State", "Estado"]
+  requester: ["Reporter", "Created by", "Solicitante", "Criado por"]
+  implementer: ["Assignee", "Implemented by", "Implementado por"]
+  approver: ["Approver", "Approved by", "Aprovador", "Aprovado por"]
+  beneficiary: ["Tester", "Requested for", "Beneficiário"]
+  justification: ["Description", "Summary", "Descrição", "Justificação"]
+
+date_aliases:
+  request_date: ["Created", "Data de criação", "Aberto em"]
+  approval_date: ["Approved on", "Data de aprovação"]
+  implementation_date: ["Resolved", "Closed", "Data de resolução"]
+  validation_date: ["Tested on", "Data de validação"]
+
+date_formats:
+  - "%d/%m/%Y %H:%M"
+  - "%Y-%m-%d %H:%M:%S"
+  - "%Y-%m-%dT%H:%M:%S"
+  - "%d-%m-%Y"
+
+expected_states:
+  - "Done"
+  - "Closed"
+  - "Resolved"
+  - "Fechado"
+  - "Resolvido"
+  - "Concluído"
+
+checks:
+  confidence_threshold: 0.6
+  sod:
+    include_beneficiary: false
+    allow_role_overlap: false
+  validation:
+    required: false
+  timeliness:
+    enabled: false
+    sla_days: null
+
+extraction_notes: |
+  Esqueleto genérico — ajustar aliases com base em tickets reais.
+  Usar o modo de Calibração da app para adicionar exemplos validados.
+
+examples: []

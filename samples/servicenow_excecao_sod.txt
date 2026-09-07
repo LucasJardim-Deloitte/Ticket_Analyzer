@@ -1,0 +1,18 @@
+Number: RITM0012400
+Short description: Criação de acesso — SAP QAS
+Requested by: Diogo Reis (diogo.reis@cliente.pt)
+Requested for: Elena Marques (elena.marques@cliente.pt)
+Configuration item: SAP ECC
+Environment: Qualidade
+State: Closed Complete
+Opened: 05-02-2026 10:00:00
+Approved by: Carla Nunes (carla.nunes@cliente.pt)
+Approved on: 05-02-2026 14:00:00
+Closed: 05-02-2026 16:00:00
+Assigned to: Diogo Reis (diogo.reis@cliente.pt)
+Business justification: Acesso a QAS para testes de integração.
+
+Work notes:
+2026-02-05 10:00 - Diogo Reis: Ticket aberto.
+2026-02-05 14:00 - Carla Nunes: Aprovado.
+2026-02-05 16:00 - Diogo Reis: Acesso criado no SAP QAS.

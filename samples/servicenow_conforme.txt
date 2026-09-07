@@ -1,0 +1,19 @@
+Number: RITM0012345
+Short description: Criação de acesso — SAP PRD para novo colaborador
+Requested by: Ana Silva (ana.silva@cliente.pt)
+Requested for: Bruno Costa (bruno.costa@cliente.pt)
+Configuration item: SAP ECC
+Environment: Produção
+State: Closed Complete
+Opened: 03-02-2026 09:14:00
+Approved by: Carla Nunes (carla.nunes@cliente.pt)
+Approved on: 03-02-2026 11:00:00
+Closed: 04-02-2026 15:30:00
+Assigned to: Diogo Reis (diogo.reis@cliente.pt)
+Business justification: Novo colaborador do departamento financeiro, precisa de acesso a
+FI/CO para desempenhar funções descritas no perfil ID 4521.
+
+Work notes:
+2026-02-03 09:14 - Ana Silva: Ticket aberto para criação de acesso SAP.
+2026-02-03 11:00 - Carla Nunes: Aprovado. Perfil consistente com o role do colaborador.
+2026-02-04 15:30 - Diogo Reis: Acesso criado no SAP PRD e comunicado ao utilizador.

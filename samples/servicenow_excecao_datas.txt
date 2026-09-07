@@ -1,0 +1,18 @@
+Number: RITM0012501
+Short description: Criação de acesso — Oracle Financials
+Requested by: Ana Silva (ana.silva@cliente.pt)
+Requested for: Filipe Andrade (filipe.andrade@cliente.pt)
+Configuration item: Oracle Financials
+Environment: Produção
+State: Closed Complete
+Opened: 06-02-2026 08:00:00
+Approved by: Carla Nunes (carla.nunes@cliente.pt)
+Approved on: 08-02-2026 10:00:00
+Closed: 06-02-2026 11:30:00
+Assigned to: Diogo Reis (diogo.reis@cliente.pt)
+Business justification: Colaborador transferido para o departamento financeiro.
+
+Work notes:
+2026-02-06 08:00 - Ana Silva: Ticket aberto — pedido urgente.
+2026-02-06 11:30 - Diogo Reis: Acesso criado (aprovação verbal do responsável).
+2026-02-08 10:00 - Carla Nunes: Aprovação formal registada retroativamente.

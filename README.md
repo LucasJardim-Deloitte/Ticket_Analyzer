@@ -30,7 +30,7 @@ streamlit run app.py
 
 3. **Quatro estados, não dois.** Cada regra devolve `CONFORME`, `EXCECAO`,
    `NAO_APLICAVEL` ou `REVER` (dados insuficientes). Distinguir "o controlo falhou" de
-   "não conseguimos ler" é crítico em auditoria.
+   "não conseguimos ler".
 
 ## Estrutura do repositório
 
